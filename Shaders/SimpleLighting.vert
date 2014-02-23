@@ -6,7 +6,7 @@ attribute vec3 DiffuseMaterial;
 
 uniform mat4 Projection;
 uniform mat4 Modelview;
-uniform mat4 NormalMatrix;
+uniform mat3 NormalMatrix;
 uniform vec3 LightPosition;
 uniform vec3 AmbientMaterial;
 uniform vec3 SpecularMaterial;
