@@ -1,7 +1,11 @@
 #import "GLView.h"
 #import <OpenGLES/ES2/gl.h> // <-- for GL_RENDERBUFFER only
 
+#if GL_1_1
 const bool ForceES1 = true;
+#else
+const bool ForceES1 = false;
+#endif
 
 @implementation GLView
 

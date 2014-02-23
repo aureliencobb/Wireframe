@@ -28,6 +28,7 @@ public:
 private:
     vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
+    GLuint m_depthRenderbuffer;
     mat4 m_translation;
 };
 
@@ -41,24 +42,26 @@ RenderingEngine::RenderingEngine() {
 }
 
 void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
+    glEnable(GL_DEPTH_TEST);
+
     vector<ISurface *>::const_iterator surface;
     for (surface = surfaces.begin(); surface != surfaces.end(); ++surface) {
         // Create VBO for vertices
         vector<float> vertices;
-        (*surface)->GenerateVertices(vertices);
+        (*surface)->GenerateVertices(vertices, VertexFlagsNormal);
         GLuint vertexBuffer;
         glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(vertices[0]), &vertices[0], GL_STATIC_DRAW);
         
         // create VBO for indices (if needed)
-        int indexCount = (*surface)->GetLineIndexCount();
+        int indexCount = (*surface)->GetTriangleIndexCount();
         GLuint indexBuffer;
         if (!m_drawables.empty() && indexCount == m_drawables[0].IndexCount) {
             indexBuffer = m_drawables[0].IndexBuffer;
         } else {
             vector<GLushort> indices(indexCount);
-            (*surface)->GenerateLineIndices(indices);
+            (*surface)->GenerateTriangleIndices(indices);
             glGenBuffers(1, &indexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices[0]), &indices[0], GL_STATIC_DRAW);
@@ -66,18 +69,41 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
         Drawable drawable = { vertexBuffer, indexBuffer, indexCount };
         m_drawables.push_back(drawable);
     }
+    
+    // Depth Buffer
+    int width, height;
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_WIDTH_OES, &width);
+    glGetRenderbufferParameterivOES(GL_RENDERBUFFER_OES, GL_RENDERBUFFER_HEIGHT_OES, &height);
+    
+    glGenRenderbuffersOES(1, &m_depthRenderbuffer);
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, m_depthRenderbuffer);
+    glRenderbufferStorageOES(GL_RENDERBUFFER_OES, GL_DEPTH_COMPONENT16_OES, width, height);
+    
     // Create the framebuffer object
     GLuint frameBuffer;
     glGenFramebuffersOES(1, &frameBuffer);
     glBindFramebufferOES(GL_FRAMEBUFFER_OES, frameBuffer);
     glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_COLOR_ATTACHMENT0_OES, GL_RENDERBUFFER_OES, m_colorRenderbuffer);
+    glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, m_depthRenderbuffer);
+    glBindRenderbufferOES(GL_RENDERBUFFER_OES, m_colorRenderbuffer);
     glEnableClientState(GL_VERTEX_ARRAY);
+    
+    // Light
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_LIGHT0);
+
+    // set up material properties
+    vec4 specular(0.5, 0.5, 0.5, 1);
+    glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular.Pointer());
+    glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, 50.0);
+    
     m_translation = mat4::Translate(0, 0, -7);
 }
     
 void RenderingEngine::Render(const vector<Visual>& visuals) const {
     glClearColor(0.5f, 0.5f, 0.5f, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     vector<Visual>::const_iterator visual = visuals.begin();
     for (int visualIndex = 0; visual != visuals.end(); ++visual, ++visualIndex) {
         
@@ -86,10 +112,15 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         ivec2 lowerLeft = visual->LowerLeft;
         glViewport(lowerLeft.x, lowerLeft.y, size.x, size.y);
         
+        // Set light position
+        glMatrixMode(GL_MODELVIEW);
+        glLoadIdentity();
+        vec4 lightPosition(0.25, 0.25, 1, 0);
+        glLightfv(GL_LIGHT0, GL_POSITION, lightPosition.Pointer());
+        
         // Modelview Transform
         mat4 rotation = visual->Orientation.ToMatrix();
         mat4 modelView = rotation * m_translation;
-        glMatrixMode(GL_MODELVIEW);
         glLoadMatrixf(modelView.Pointer());
         
         // Projection Transform
@@ -98,17 +129,20 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         glMatrixMode(GL_PROJECTION);
         glLoadMatrixf(projection.Pointer());
         
-        // set color
-        vec3 color = visual->Color;
-        glColor4f(color.x, color.y, color.z, 1.0);
+        // set diffuse color
+        vec3 color = visual->Color * 0.75;
+        vec4 diffuse(color.x, color.y, color.z, 1);
+        glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse.Pointer());
         
-        // Draw wireframe
-        int stride = sizeof(vec3);
+        // Draw the surface
+        int stride = sizeof(vec3) * 2;
         const Drawable& drawable = m_drawables[visualIndex];
         glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
         glVertexPointer(3, GL_FLOAT, stride, 0);
+        const GLvoid * normalOffset = (const GLvoid *)sizeof(vec3);
+        glNormalPointer(GL_FLOAT, stride, normalOffset);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
-        glDrawElements(GL_LINES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
 }
     

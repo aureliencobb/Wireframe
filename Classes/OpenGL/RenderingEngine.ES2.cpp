@@ -7,7 +7,7 @@
 namespace ES2 {
 
 #define STRINGIFY(A)  #A
-#include "../../Shaders/Simple.vert"
+#include "../../Shaders/SimpleLighting.vert"
 #include "../../Shaders/Simple.frag"
 
 struct Drawable {
@@ -26,6 +26,7 @@ private:
     GLuint BuildProgram(const char* vShader, const char* fShader) const;
     vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
+    GLuint m_depthRenderbuffer;
     GLint m_projectionUniform;
     GLint m_modelviewUniform;
     GLuint m_positionSlot;
@@ -62,13 +63,13 @@ void RenderingEngine::Initialize(const vector<ISurface*>& surfaces)
                      GL_STATIC_DRAW);
         
         // Create a new VBO for the indices if needed.
-        int indexCount = (*surface)->GetLineIndexCount();
+        int indexCount = (*surface)->GetTriangleIndexCount();
         GLuint indexBuffer;
         if (!m_drawables.empty() && indexCount == m_drawables[0].IndexCount) {
             indexBuffer = m_drawables[0].IndexBuffer;
         } else {
             vector<GLushort> indices(indexCount);
-            (*surface)->GenerateLineIndices(indices);
+            (*surface)->GenerateTriangleIndices(indices);
             glGenBuffers(1, &indexBuffer);
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indexBuffer);
             glBufferData(GL_ELEMENT_ARRAY_BUFFER,
@@ -81,12 +82,22 @@ void RenderingEngine::Initialize(const vector<ISurface*>& surfaces)
         m_drawables.push_back(drawable);
     }
     
+    // Depth Buffer
+    int width, height;
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_WIDTH, &width);
+    glGetRenderbufferParameteriv(GL_RENDERBUFFER, GL_RENDERBUFFER_HEIGHT, &height);
+    
+    glGenRenderbuffers(1, &m_depthRenderbuffer);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
+    
     // Create the framebuffer object.
     GLuint framebuffer;
     glGenFramebuffers(1, &framebuffer);
     glBindFramebuffer(GL_FRAMEBUFFER, framebuffer);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
                               GL_RENDERBUFFER, m_colorRenderbuffer);
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, m_depthRenderbuffer);
+    glEnable(GL_DEPTH_TEST);
     glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderbuffer);
     
     // Create the GLSL program.
@@ -105,7 +116,7 @@ void RenderingEngine::Initialize(const vector<ISurface*>& surfaces)
 void RenderingEngine::Render(const vector<Visual>& visuals) const
 {
     glClearColor(0.5f, 0.5f, 0.5f, 1);
-    glClear(GL_COLOR_BUFFER_BIT);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
     vector<Visual>::const_iterator visual = visuals.begin();
     for (int visualIndex = 0; visual != visuals.end(); ++visual, ++visualIndex) {
@@ -135,7 +146,7 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const
         glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
         glVertexAttribPointer(m_positionSlot, 3, GL_FLOAT, GL_FALSE, stride, 0);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
-        glDrawElements(GL_LINES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
+        glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
 }
 
