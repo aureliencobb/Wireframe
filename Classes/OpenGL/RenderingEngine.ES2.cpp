@@ -14,8 +14,8 @@
 #include "Matrix.hpp"
 
 #define STRINGIFY(A) #A
-#include "../../Shaders/SimpleLighting.vert"
-#include "../../Shaders/Simple.frag"
+#include "../../Shaders/PixelLighting.vert"
+#include "../../Shaders/PixelLighting.frag"
 
 struct UniformHandles {
     GLuint ModelView;

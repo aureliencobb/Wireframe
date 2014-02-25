@@ -13,12 +13,19 @@
 #include "Vector.hpp"
 #include "Quaternion.hpp"
 #include <vector>
+#include <string>
 
 using std::vector;
+using std::string;
 
 enum VertexFlags {
     VertexFlagsNormal = 1 << 0,
     VertexFlagsTexCoords = 1 << 1,
+};
+
+struct IResourceManager {
+    virtual string GetResourcepath() const =0;
+    virtual ~IResourceManager() {}
 };
 
 struct IApplicationEngine {
@@ -54,7 +61,8 @@ struct IRenderingEngine {
     virtual ~IRenderingEngine() {}
 };
 
-IApplicationEngine * CreateApplicationEngine(IRenderingEngine * renderingEngine);
+IResourceManager * CreateResourceManager();
+IApplicationEngine * CreateApplicationEngine(IRenderingEngine * renderingEngine, IResourceManager * resourceManager);
 namespace ES1 {
     IRenderingEngine * CreateRenderingEngine();
 }

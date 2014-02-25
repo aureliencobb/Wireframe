@@ -6,6 +6,7 @@
 @private
     IApplicationEngine* m_applicationEngine;
     IRenderingEngine* m_renderingEngine;
+    IResourceManager* m_resourceManager;
     EAGLContext* m_context;
     float m_timestamp;
     float m_scale;

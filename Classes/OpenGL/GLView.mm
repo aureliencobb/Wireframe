@@ -42,8 +42,9 @@ const bool ForceES1 = false;
             NSLog(@"Using OpenGL ES 2.0");
             m_renderingEngine = ES2::CreateRenderingEngine();
         }
-
-        m_applicationEngine = CreateApplicationEngine(m_renderingEngine);
+        
+        m_resourceManager = CreateResourceManager();
+        m_applicationEngine = CreateApplicationEngine(m_renderingEngine, m_resourceManager);
 
         m_scale = [[UIScreen mainScreen] scale];
         

@@ -8,12 +8,12 @@
 
 #include "ApplicationEngine.hpp"
 
-IApplicationEngine * CreateApplicationEngine(IRenderingEngine * renderingEngine) {
-    return new ApplicationEngine(renderingEngine);
+IApplicationEngine * CreateApplicationEngine(IRenderingEngine * renderingEngine, IResourceManager * resourceManager) {
+    return new ApplicationEngine(renderingEngine, resourceManager);
 }
 
-ApplicationEngine::ApplicationEngine(IRenderingEngine * renderingEngine) :
-    m_spinning(false), m_renderingEngine(renderingEngine), m_pressedButton(-1) {
+ApplicationEngine::ApplicationEngine(IRenderingEngine * renderingEngine, IResourceManager * resourceManager) :
+    m_spinning(false), m_renderingEngine(renderingEngine), m_pressedButton(-1), m_resourceManager(resourceManager) {
         m_buttonSurfaces[0] = 0;
         m_buttonSurfaces[1] = 1;
         m_buttonSurfaces[2] = 2;
@@ -35,11 +35,12 @@ void ApplicationEngine::Initialize(int width, int height) {
     m_centerPoint = m_screenSize / 2;
     
     vector<ISurface*>surfaces(SurfaceCount);
-    surfaces[0] = new Cone(3, 1);
+    string path = m_resourceManager->GetResourcepath();
+    surfaces[0] = new ObjSurface(path + "/Ninja.obj");
     surfaces[1] = new Sphere(1.4);
     surfaces[2] = new Torus(1.4, 0.3);
     surfaces[3] = new TrefoilKnot(1.8);
-    surfaces[4] = new KleinBottle(0.2);
+    surfaces[4] = new ObjSurface(path + "/micronapalmv2.obj");
     surfaces[5] = new MobiusStrip(1);
     m_renderingEngine->Initialize(surfaces);
     for (int i = 0; i < SurfaceCount; i++) {

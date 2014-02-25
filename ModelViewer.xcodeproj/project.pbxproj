@@ -12,6 +12,16 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		4A38996218BB77EC005AB03B /* capsule.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996018BB77EC005AB03B /* capsule.obj */; };
+		4A38996518BB798A005AB03B /* ResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996318BB798A005AB03B /* ResourceManager.mm */; };
+		4A38996618BB798A005AB03B /* ResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996318BB798A005AB03B /* ResourceManager.mm */; };
+		4A38996918BB7C1F005AB03B /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996718BB7C1F005AB03B /* ObjSurface.cpp */; };
+		4A38996A18BB7C1F005AB03B /* ObjSurface.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996718BB7C1F005AB03B /* ObjSurface.cpp */; };
+		4A38996B18BCF2C9005AB03B /* capsule.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996018BB77EC005AB03B /* capsule.obj */; };
+		4A38996E18BCF62D005AB03B /* micronapalmv2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996C18BCF62D005AB03B /* micronapalmv2.obj */; };
+		4A38996F18BCF62D005AB03B /* micronapalmv2.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996C18BCF62D005AB03B /* micronapalmv2.obj */; };
+		4A38997018BCF62D005AB03B /* Ninja.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996D18BCF62D005AB03B /* Ninja.obj */; };
+		4A38997118BCF62D005AB03B /* Ninja.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996D18BCF62D005AB03B /* Ninja.obj */; };
 		4A71E9A018B8D08200250A68 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A71E99F18B8D08200250A68 /* Default-568h@2x.png */; };
 		4A71E9AC18B8D19300250A68 /* GLView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A71E9A718B8D19300250A68 /* GLView.mm */; };
 		4A71E9AD18B8D19300250A68 /* RenderingEngine.ES2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A71E9A918B8D19300250A68 /* RenderingEngine.ES2.cpp */; };
@@ -44,6 +54,14 @@
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ModelViewer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelViewer_Prefix.pch; sourceTree = "<group>"; };
+		4A38996018BB77EC005AB03B /* capsule.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = capsule.obj; sourceTree = "<group>"; };
+		4A38996318BB798A005AB03B /* ResourceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourceManager.mm; sourceTree = "<group>"; };
+		4A38996718BB7C1F005AB03B /* ObjSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjSurface.cpp; sourceTree = "<group>"; };
+		4A38996818BB7C1F005AB03B /* ObjSurface.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = ObjSurface.hpp; sourceTree = "<group>"; };
+		4A38996C18BCF62D005AB03B /* micronapalmv2.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = micronapalmv2.obj; sourceTree = "<group>"; };
+		4A38996D18BCF62D005AB03B /* Ninja.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Ninja.obj; sourceTree = "<group>"; };
+		4A6E6F8918BAB96700FBCE16 /* PixelLighting.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PixelLighting.vert; sourceTree = "<group>"; };
+		4A6E6F8B18BAB9BE00FBCE16 /* PixelLighting.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = PixelLighting.frag; sourceTree = "<group>"; };
 		4A71E99F18B8D08200250A68 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		4A71E9A318B8D19300250A68 /* Matrix.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Matrix.hpp; sourceTree = "<group>"; };
 		4A71E9A418B8D19300250A68 /* Vector.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Vector.hpp; sourceTree = "<group>"; };
@@ -54,8 +72,6 @@
 		4A71E9AF18B8D3A200250A68 /* ParametricSurface.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ParametricSurface.hpp; sourceTree = "<group>"; };
 		4A71E9B018B8D55700250A68 /* ParametricSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ParametricSurface.cpp; sourceTree = "<group>"; };
 		4A71E9B418B8D6BD00250A68 /* Interfaces.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Interfaces.hpp; sourceTree = "<group>"; };
-		4A71E9B818B8D97F00250A68 /* Simple.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = Simple.frag; sourceTree = "<group>"; };
-		4A71E9B918B8D97F00250A68 /* SimpleLighting.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SimpleLighting.vert; sourceTree = "<group>"; };
 		4A71E9BC18B8DAC100250A68 /* Quaternion.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = Quaternion.hpp; sourceTree = "<group>"; };
 		4A71E9BD18B8E65600250A68 /* ApplicationEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ApplicationEngine.cpp; sourceTree = "<group>"; };
 		4A71E9C018B8E7D100250A68 /* ApplicationEngine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ApplicationEngine.hpp; sourceTree = "<group>"; };
@@ -141,6 +157,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				4A38995E18BB77EC005AB03B /* Resources */,
 				4A71E99F18B8D08200250A68 /* Default-568h@2x.png */,
 				8D1107310486CEB800E47090 /* ModelViewer-2.0-Info.plist */,
 				4A71E9D918BA88A700250A68 /* ModelViewer-1.1-Info.plist */,
@@ -160,11 +177,37 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		4A38995E18BB77EC005AB03B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				4A38995F18BB77EC005AB03B /* Meshes */,
+				4A38996118BB77EC005AB03B /* Textures */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		4A38995F18BB77EC005AB03B /* Meshes */ = {
+			isa = PBXGroup;
+			children = (
+				4A38996C18BCF62D005AB03B /* micronapalmv2.obj */,
+				4A38996D18BCF62D005AB03B /* Ninja.obj */,
+				4A38996018BB77EC005AB03B /* capsule.obj */,
+			);
+			path = Meshes;
+			sourceTree = "<group>";
+		};
+		4A38996118BB77EC005AB03B /* Textures */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Textures;
+			sourceTree = "<group>";
+		};
 		4A71E9A118B8D18A00250A68 /* Shaders */ = {
 			isa = PBXGroup;
 			children = (
-				4A71E9B818B8D97F00250A68 /* Simple.frag */,
-				4A71E9B918B8D97F00250A68 /* SimpleLighting.vert */,
+				4A6E6F8918BAB96700FBCE16 /* PixelLighting.vert */,
+				4A6E6F8B18BAB9BE00FBCE16 /* PixelLighting.frag */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
@@ -199,6 +242,9 @@
 				4A71E9AF18B8D3A200250A68 /* ParametricSurface.hpp */,
 				4A71E9B018B8D55700250A68 /* ParametricSurface.cpp */,
 				4A71E9B418B8D6BD00250A68 /* Interfaces.hpp */,
+				4A38996318BB798A005AB03B /* ResourceManager.mm */,
+				4A38996718BB7C1F005AB03B /* ObjSurface.cpp */,
+				4A38996818BB7C1F005AB03B /* ObjSurface.hpp */,
 			);
 			path = Shapes;
 			sourceTree = "<group>";
@@ -271,6 +317,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A71E9A018B8D08200250A68 /* Default-568h@2x.png in Resources */,
+				4A38996B18BCF2C9005AB03B /* capsule.obj in Resources */,
+				4A38997118BCF62D005AB03B /* Ninja.obj in Resources */,
+				4A38996F18BCF62D005AB03B /* micronapalmv2.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -279,6 +328,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A71E9C618BA88A600250A68 /* Default-568h@2x.png in Resources */,
+				4A38996218BB77EC005AB03B /* capsule.obj in Resources */,
+				4A38997018BCF62D005AB03B /* Ninja.obj in Resources */,
+				4A38996E18BCF62D005AB03B /* micronapalmv2.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -293,9 +345,11 @@
 				4A71E9AD18B8D19300250A68 /* RenderingEngine.ES2.cpp in Sources */,
 				4A71E9C318B8EE2E00250A68 /* RenderingEngine.ES1.cpp in Sources */,
 				4A71E9AC18B8D19300250A68 /* GLView.mm in Sources */,
+				4A38996A18BB7C1F005AB03B /* ObjSurface.cpp in Sources */,
 				4A71E9B218B8D55700250A68 /* ParametricSurface.cpp in Sources */,
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* AppDelegate.mm in Sources */,
+				4A38996618BB798A005AB03B /* ResourceManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -307,9 +361,11 @@
 				4A71E9C918BA88A600250A68 /* RenderingEngine.ES2.cpp in Sources */,
 				4A71E9CA18BA88A600250A68 /* RenderingEngine.ES1.cpp in Sources */,
 				4A71E9CB18BA88A600250A68 /* GLView.mm in Sources */,
+				4A38996918BB7C1F005AB03B /* ObjSurface.cpp in Sources */,
 				4A71E9CC18BA88A600250A68 /* ParametricSurface.cpp in Sources */,
 				4A71E9CD18BA88A600250A68 /* main.m in Sources */,
 				4A71E9CE18BA88A600250A68 /* AppDelegate.mm in Sources */,
+				4A38996518BB798A005AB03B /* ResourceManager.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

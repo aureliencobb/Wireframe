@@ -10,6 +10,7 @@
 #define WireframeSkeleton_ApplicationEngine_h
 
 #include "Interfaces.hpp"
+#include "ObjSurface.hpp"
 #include "ParametricEquations.hpp"
 #include <algorithm>
 
@@ -29,7 +30,7 @@ struct Animation {
 
 class ApplicationEngine : public IApplicationEngine {
 public:
-    ApplicationEngine(IRenderingEngine * renderingEngine);
+    ApplicationEngine(IRenderingEngine * renderingEngine, IResourceManager * resourceManager);
     ~ApplicationEngine();
     void Initialize(int width, int height);
     void Render() const;
@@ -49,6 +50,7 @@ private:
     Quaternion m_orientation;
     Quaternion m_previousOrientation;
     IRenderingEngine * m_renderingEngine;
+    IResourceManager * m_resourceManager;
     int m_currentSurface;
     ivec2 m_buttonSize;
     int m_pressedButton;
