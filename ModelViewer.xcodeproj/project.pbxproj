@@ -12,7 +12,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
-		4A0985DB18D752D900EE011F /* ModelViewer-1.1-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DA18D752D900EE011F /* ModelViewer-1.1-Info.plist */; };
 		4A0985DD18D8740400EE011F /* Grid16.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DC18D8740400EE011F /* Grid16.png */; };
 		4A0985DE18D8740400EE011F /* Grid16.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DC18D8740400EE011F /* Grid16.png */; };
 		4A38996218BB77EC005AB03B /* capsule.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996018BB77EC005AB03B /* capsule.obj */; };
@@ -333,7 +332,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A0985DB18D752D900EE011F /* ModelViewer-1.1-Info.plist in Resources */,
 				4A71E9C618BA88A600250A68 /* Default-568h@2x.png in Resources */,
 				4A38996218BB77EC005AB03B /* capsule.obj in Resources */,
 				4A38997018BCF62D005AB03B /* Ninja.obj in Resources */,
