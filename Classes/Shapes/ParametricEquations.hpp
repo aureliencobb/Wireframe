@@ -4,7 +4,7 @@ class Cone : public ParametricSurface {
 public:
     Cone(float height, float radius) : m_height(height), m_radius(radius)
     {
-        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, 1) };
+        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, 1), vec2(30, 20) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -24,7 +24,7 @@ class Sphere : public ParametricSurface {
 public:
     Sphere(float radius) : m_radius(radius)
     {
-        ParametricInterval interval = { ivec2(20, 20), vec2(Pi, TwoPi) };
+        ParametricInterval interval = { ivec2(20, 20), vec2(Pi, TwoPi), vec2(20, 35) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -45,7 +45,7 @@ public:
 	m_majorRadius(majorRadius),
 	m_minorRadius(minorRadius)
     {
-        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, TwoPi) };
+        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, TwoPi), vec2(50, 15) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -67,7 +67,7 @@ class TrefoilKnot : public ParametricSurface {
 public:
     TrefoilKnot(float scale) : m_scale(scale)
     {
-        ParametricInterval interval = { ivec2(60, 15), vec2(TwoPi, TwoPi) };
+        ParametricInterval interval = { ivec2(60, 15), vec2(TwoPi, TwoPi), vec2(100, 10) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -109,7 +109,7 @@ class MobiusStrip : public ParametricSurface {
 public:
     MobiusStrip(float scale) : m_scale(scale)
     {
-        ParametricInterval interval = { ivec2(40, 20), vec2(TwoPi, TwoPi) };
+        ParametricInterval interval = { ivec2(40, 20), vec2(TwoPi, TwoPi), vec2(50, 20) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -141,7 +141,7 @@ class KleinBottle : public ParametricSurface {
 public:
     KleinBottle(float scale) : m_scale(scale)
     {
-        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, TwoPi) };
+        ParametricInterval interval = { ivec2(20, 20), vec2(TwoPi, TwoPi), vec2(20, 35) };
         SetInterval(interval);
     }
     vec3 Evaluate(const vec2& domain) const
@@ -173,7 +173,7 @@ private:
     float m_scale;
 };
 
-/*
+
 class Quad : public ParametricSurface {
 public:
     Quad(float width, float height) : m_size(width, height)
@@ -189,4 +189,4 @@ public:
     }
 private:
     vec2 m_size;
-};*/
+};

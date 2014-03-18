@@ -12,6 +12,9 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
+		4A0985DB18D752D900EE011F /* ModelViewer-1.1-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DA18D752D900EE011F /* ModelViewer-1.1-Info.plist */; };
+		4A0985DD18D8740400EE011F /* Grid16.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DC18D8740400EE011F /* Grid16.png */; };
+		4A0985DE18D8740400EE011F /* Grid16.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0985DC18D8740400EE011F /* Grid16.png */; };
 		4A38996218BB77EC005AB03B /* capsule.obj in Resources */ = {isa = PBXBuildFile; fileRef = 4A38996018BB77EC005AB03B /* capsule.obj */; };
 		4A38996518BB798A005AB03B /* ResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996318BB798A005AB03B /* ResourceManager.mm */; };
 		4A38996618BB798A005AB03B /* ResourceManager.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4A38996318BB798A005AB03B /* ResourceManager.mm */; };
@@ -54,6 +57,8 @@
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* ModelViewer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ModelViewer_Prefix.pch; sourceTree = "<group>"; };
+		4A0985DA18D752D900EE011F /* ModelViewer-1.1-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ModelViewer-1.1-Info.plist"; sourceTree = "<group>"; };
+		4A0985DC18D8740400EE011F /* Grid16.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Grid16.png; sourceTree = "<group>"; };
 		4A38996018BB77EC005AB03B /* capsule.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = capsule.obj; sourceTree = "<group>"; };
 		4A38996318BB798A005AB03B /* ResourceManager.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ResourceManager.mm; sourceTree = "<group>"; };
 		4A38996718BB7C1F005AB03B /* ObjSurface.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjSurface.cpp; sourceTree = "<group>"; };
@@ -77,7 +82,6 @@
 		4A71E9C018B8E7D100250A68 /* ApplicationEngine.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ApplicationEngine.hpp; sourceTree = "<group>"; };
 		4A71E9C118B8EE2E00250A68 /* RenderingEngine.ES1.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RenderingEngine.ES1.cpp; sourceTree = "<group>"; };
 		4A71E9D818BA88A600250A68 /* Model 1.1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Model 1.1.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		4A71E9D918BA88A700250A68 /* ModelViewer-1.1-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "ModelViewer-1.1-Info.plist"; path = "/Users/aureliencobb/code/opengl/WireframeSkeleton/ModelViewer-1.1-Info.plist"; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* ModelViewer-2.0-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ModelViewer-2.0-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		C98B78B511357FA50072731A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		C98B78B711357FA50072731A /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -159,8 +163,8 @@
 			children = (
 				4A38995E18BB77EC005AB03B /* Resources */,
 				4A71E99F18B8D08200250A68 /* Default-568h@2x.png */,
+				4A0985DA18D752D900EE011F /* ModelViewer-1.1-Info.plist */,
 				8D1107310486CEB800E47090 /* ModelViewer-2.0-Info.plist */,
-				4A71E9D918BA88A700250A68 /* ModelViewer-1.1-Info.plist */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -199,6 +203,7 @@
 		4A38996118BB77EC005AB03B /* Textures */ = {
 			isa = PBXGroup;
 			children = (
+				4A0985DC18D8740400EE011F /* Grid16.png */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -319,6 +324,7 @@
 				4A71E9A018B8D08200250A68 /* Default-568h@2x.png in Resources */,
 				4A38996B18BCF2C9005AB03B /* capsule.obj in Resources */,
 				4A38997118BCF62D005AB03B /* Ninja.obj in Resources */,
+				4A0985DE18D8740400EE011F /* Grid16.png in Resources */,
 				4A38996F18BCF62D005AB03B /* micronapalmv2.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -327,9 +333,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A0985DB18D752D900EE011F /* ModelViewer-1.1-Info.plist in Resources */,
 				4A71E9C618BA88A600250A68 /* Default-568h@2x.png in Resources */,
 				4A38996218BB77EC005AB03B /* capsule.obj in Resources */,
 				4A38997018BCF62D005AB03B /* Ninja.obj in Resources */,
+				4A0985DD18D8740400EE011F /* Grid16.png in Resources */,
 				4A38996E18BCF62D005AB03B /* micronapalmv2.obj in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

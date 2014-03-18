@@ -36,11 +36,12 @@ void ApplicationEngine::Initialize(int width, int height) {
     
     vector<ISurface*>surfaces(SurfaceCount);
     string path = m_resourceManager->GetResourcepath();
-    surfaces[0] = new ObjSurface(path + "/Ninja.obj");
+    // To add obj file do 'new ObjSurface(path + "/filename.obj");'
+    surfaces[0] = new Cone(3, 1);//ObjSurface(path + "/Ninja.obj");
     surfaces[1] = new Sphere(1.4);
     surfaces[2] = new Torus(1.4, 0.3);
     surfaces[3] = new TrefoilKnot(1.8);
-    surfaces[4] = new ObjSurface(path + "/micronapalmv2.obj");
+    surfaces[4] = new KleinBottle(0.2);
     surfaces[5] = new MobiusStrip(1);
     m_renderingEngine->Initialize(surfaces);
     for (int i = 0; i < SurfaceCount; i++) {

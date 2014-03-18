@@ -31,6 +31,7 @@ struct AttributeHandles {
     GLint Position;
     GLint Normal;
     GLint Diffuse;
+    GLint TextureCoord;
 };
 
 namespace ES2 {
@@ -43,7 +44,7 @@ struct Drawable {
 
 class RenderingEngine : public IRenderingEngine {
 public:
-    RenderingEngine();
+    RenderingEngine(IResourceManager * resourceManager);
     void Initialize(const vector<ISurface*>& surfaces);
     void Render(const vector<Visual>& visuals) const;
 private:
@@ -52,16 +53,19 @@ private:
     vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
     GLuint m_depthRenderbuffer;
+    GLuint m_gridTexture;
+    IResourceManager * m_resourceManager;
     mat4 m_translation;
     UniformHandles m_uniforms;
     AttributeHandles m_attributes;
 };
 
-IRenderingEngine * CreateRenderingEngine() {
-    return new RenderingEngine();
+IRenderingEngine * CreateRenderingEngine(IResourceManager * resourceManager) {
+    return new RenderingEngine(resourceManager);
 }
 
-RenderingEngine::RenderingEngine() {
+RenderingEngine::RenderingEngine(IResourceManager * resourceManager) {
+    m_resourceManager = resourceManager;
     glGenRenderbuffers(1, &m_colorRenderbuffer);
     glBindRenderbuffer(GL_RENDERBUFFER, m_colorRenderbuffer);
 }
@@ -118,6 +122,7 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     m_attributes.Position = glGetAttribLocation(program, "Position");
     m_attributes.Normal = glGetAttribLocation(program, "Normal");
     m_attributes.Diffuse = glGetAttribLocation(program, "DiffuseMaterial");
+    m_attributes.TextureCoord = glGetAttribLocation(program, "TextureCoord");
     
     m_uniforms.Projection = glGetUniformLocation(program, "Projection");
     m_uniforms.ModelView = glGetUniformLocation(program, "Modelview");
@@ -127,6 +132,17 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     m_uniforms.Specular = glGetUniformLocation(program, "SpecularMaterial");
     m_uniforms.Shininess = glGetUniformLocation(program, "Shininess");
     
+    // Load the texture
+    glGenTextures(1, &m_gridTexture);
+    glBindTexture(GL_TEXTURE_2D, m_gridTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    m_resourceManager->LoadPngImage("Grid16.png");
+    void * pixels = m_resourceManager->GetImageData();
+    ivec2 imageSize = m_resourceManager->GetImageSize();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSize.x, imageSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    m_resourceManager->UnloadImage();
+    
     // some default material parameters
     glVertexAttrib3f(m_uniforms.Ambient, 0.04, 0.04, 0.04);
     glVertexAttrib3f(m_uniforms.Specular, 0.5, 0.5, 0.5);
@@ -134,6 +150,7 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     
     glEnableVertexAttribArray(m_attributes.Position);
     glEnableVertexAttribArray(m_attributes.Normal);
+    glEnableVertexAttribArray(m_attributes.TextureCoord);
     
     m_translation = mat4::Translate(0, 0, -7);
 }
@@ -173,14 +190,18 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         glVertexAttrib4f(m_attributes.Diffuse, color.x, color.y, color.z, 1);
         
         // Draw the surface
-        int stride = sizeof(vec3) * 2;
-        const GLvoid * offset = (const GLvoid *)sizeof(vec3);
+        int stride = sizeof(vec3) * 2 + sizeof(vec2);
+        const GLvoid * normalOffset = (const GLvoid *)sizeof(vec3);
+        const GLvoid * texCoordOffset = (const GLvoid *)(sizeof(vec3) * 2);
         GLint position = m_attributes.Position;
         GLint normal = m_attributes.Normal;
+        GLint texCoord = m_attributes.TextureCoord;
+        
         const Drawable & drawable = m_drawables[visualIndex];
         glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
         glVertexAttribPointer(position, 3, GL_FLOAT, GL_FALSE, stride, 0);
-        glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE, stride, offset);
+        glVertexAttribPointer(normal, 3, GL_FLOAT, GL_FALSE, stride, normalOffset);
+        glVertexAttribPointer(texCoord, 2, GL_FLOAT, GL_FALSE, stride, texCoordOffset);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
         glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }

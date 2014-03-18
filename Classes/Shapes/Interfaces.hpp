@@ -24,7 +24,11 @@ enum VertexFlags {
 };
 
 struct IResourceManager {
-    virtual string GetResourcepath() const =0;
+    virtual string GetResourcepath() const = 0;
+    virtual void LoadPngImage(const string & fileName) = 0;
+    virtual void * GetImageData() = 0;
+    virtual ivec2 GetImageSize() = 0;
+    virtual void UnloadImage() = 0;
     virtual ~IResourceManager() {}
 };
 
@@ -64,10 +68,10 @@ struct IRenderingEngine {
 IResourceManager * CreateResourceManager();
 IApplicationEngine * CreateApplicationEngine(IRenderingEngine * renderingEngine, IResourceManager * resourceManager);
 namespace ES1 {
-    IRenderingEngine * CreateRenderingEngine();
+    IRenderingEngine * CreateRenderingEngine(IResourceManager * resourceManager);
 }
 namespace ES2 {
-    IRenderingEngine * CreateRenderingEngine();
+    IRenderingEngine * CreateRenderingEngine(IResourceManager * resourceManager);
 }
 
 #endif /* defined(__WireframeSkeleton__Interfaces__) */

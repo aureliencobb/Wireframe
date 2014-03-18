@@ -22,21 +22,24 @@ struct Drawable {
 
 class RenderingEngine : public IRenderingEngine {
 public:
-    RenderingEngine();
+    RenderingEngine(IResourceManager * resourceManager);
     void Initialize(const vector<ISurface*>& surfaces);
     void Render(const vector<Visual>& visuals) const;
 private:
     vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
     GLuint m_depthRenderbuffer;
+    GLuint m_gridTexture;
+    IResourceManager * m_resourceManager;
     mat4 m_translation;
 };
 
-IRenderingEngine * CreateRenderingEngine() {
-    return new RenderingEngine();
+IRenderingEngine * CreateRenderingEngine(IResourceManager * resourceManager) {
+    return new RenderingEngine(resourceManager);
 }
 
-RenderingEngine::RenderingEngine() {
+RenderingEngine::RenderingEngine(IResourceManager * resourceManager) {
+    m_resourceManager = resourceManager;
     glGenRenderbuffersOES(1, &m_colorRenderbuffer);
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, m_colorRenderbuffer);
 }
@@ -48,7 +51,7 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     for (surface = surfaces.begin(); surface != surfaces.end(); ++surface) {
         // Create VBO for vertices
         vector<float> vertices;
-        (*surface)->GenerateVertices(vertices, VertexFlagsNormal);
+        (*surface)->GenerateVertices(vertices, VertexFlagsNormal | VertexFlagsTexCoords);
         GLuint vertexBuffer;
         glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -87,6 +90,19 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     glFramebufferRenderbufferOES(GL_FRAMEBUFFER_OES, GL_DEPTH_ATTACHMENT_OES, GL_RENDERBUFFER_OES, m_depthRenderbuffer);
     glBindRenderbufferOES(GL_RENDERBUFFER_OES, m_colorRenderbuffer);
     glEnableClientState(GL_VERTEX_ARRAY);
+    
+    // Load texture
+    glGenTextures(1, &m_gridTexture);
+    glBindTexture(GL_TEXTURE_2D, m_gridTexture);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    m_resourceManager->LoadPngImage("Grid16.png");
+    void * pixels = m_resourceManager->GetImageData();
+    ivec2 imageSize = m_resourceManager->GetImageSize();
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSize.x, imageSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    m_resourceManager->UnloadImage();
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glEnable(GL_TEXTURE_2D);
     
     // Light
     glEnableClientState(GL_NORMAL_ARRAY);
@@ -135,12 +151,14 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse.Pointer());
         
         // Draw the surface
-        int stride = sizeof(vec3) * 2;
+        int stride = sizeof(vec3) * 2 + sizeof(vec2);
+        const GLvoid * texCoordOffset = (const GLvoid *)(2* sizeof(vec3));
         const Drawable& drawable = m_drawables[visualIndex];
         glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
         glVertexPointer(3, GL_FLOAT, stride, 0);
         const GLvoid * normalOffset = (const GLvoid *)sizeof(vec3);
         glNormalPointer(GL_FLOAT, stride, normalOffset);
+        glTexCoordPointer(2, GL_FLOAT, stride, texCoordOffset);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
         glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
