@@ -23,11 +23,23 @@ enum VertexFlags {
     VertexFlagsTexCoords = 1 << 1,
 };
 
+enum TextureFormat {
+    TextureFormatGrey,
+    TextureFormatGreyAlpha,
+    TextureFormatRGB,
+    TextureFormatRGBA,
+};
+
+struct TextureDescription {
+    TextureFormat Format;
+    int BitsPerComponent;
+    ivec2 size;
+};
+
 struct IResourceManager {
     virtual string GetResourcepath() const = 0;
-    virtual void LoadPngImage(const string & fileName) = 0;
+    virtual TextureDescription LoadPngImage(const string & fileName) = 0;
     virtual void * GetImageData() = 0;
-    virtual ivec2 GetImageSize() = 0;
     virtual void UnloadImage() = 0;
     virtual ~IResourceManager() {}
 };

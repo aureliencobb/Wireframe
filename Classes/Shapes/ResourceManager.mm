@@ -21,24 +21,39 @@ public:
         return [bundlePath UTF8String];
     }
     
-    void LoadPngImage(const string & fileName) {
-//        NSString * basePath = [NSString stringWithUTF8String:fileName.c_str()];
-//        NSString * resourcePath = [[NSBundle mainBundle] resourcePath];
-//        NSString * fullPath = [resourcePath stringByAppendingString:basePath];
-//        UIImage * image = [UIImage imageWithContentsOfFile:fullPath];
+    TextureDescription LoadPngImage(const string & fileName) {
         UIImage * image = [UIImage imageNamed:[NSString stringWithUTF8String:fileName.c_str()]];
+        if (!image) {
+            NSString * basePath = [NSString stringWithUTF8String:fileName.c_str()];
+            NSString * resourcePath = [[NSBundle mainBundle] resourcePath];
+            NSString * fullPath = [resourcePath stringByAppendingString:basePath];
+            image = [UIImage imageWithContentsOfFile:fullPath];
+        }
         CGImageRef cgImage = image.CGImage;
-        m_imageSize.x = image.size.width;
-        m_imageSize.y = image.size.height;
         m_imageData = CGDataProviderCopyData(CGImageGetDataProvider(cgImage));
+        
+        TextureDescription description;
+        description.size.x = CGImageGetWidth(cgImage);
+        description.size.y = CGImageGetHeight(cgImage);
+        bool hasAlpha = CGImageGetAlphaInfo(cgImage) != kCGImageAlphaNone;
+        CGColorSpaceRef colorSpace = CGImageGetColorSpace(cgImage);
+        switch (CGColorSpaceGetModel(colorSpace)) {
+            case kCGColorSpaceModelMonochrome:
+                description.Format = hasAlpha ? TextureFormatGreyAlpha : TextureFormatGrey;
+                break;
+            case kCGColorSpaceModelRGB:
+                description.Format = hasAlpha ? TextureFormatRGBA : TextureFormatRGB;
+                break;
+            default:
+                assert(!"Unsupported color space");
+                break;
+        }
+        description.BitsPerComponent = CGImageGetBitsPerComponent(cgImage);
+        return description;
     }
     
     void * GetImageData() {
         return (void *) CFDataGetBytePtr(m_imageData);
-    }
-    
-    ivec2 GetImageSize() {
-        return m_imageSize;
     }
     
     void UnloadImage() {
@@ -47,7 +62,6 @@ public:
     
 private:
     CFDataRef m_imageData;
-    ivec2 m_imageSize;
 };
 
 IResourceManager * CreateResourceManager() {

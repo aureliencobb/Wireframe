@@ -11,6 +11,7 @@
 #include <OpenGLES/ES1/glext.h>
 #include "Interfaces.hpp"
 #include "Matrix.hpp"
+#include <assert.h>
 
 namespace ES1 {
     
@@ -26,6 +27,7 @@ public:
     void Initialize(const vector<ISurface*>& surfaces);
     void Render(const vector<Visual>& visuals) const;
 private:
+    void SetPngTexture(const string & name) const;
     vector<Drawable> m_drawables;
     GLuint m_colorRenderbuffer;
     GLuint m_depthRenderbuffer;
@@ -94,13 +96,10 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     // Load texture
     glGenTextures(1, &m_gridTexture);
     glBindTexture(GL_TEXTURE_2D, m_gridTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    m_resourceManager->LoadPngImage("Grid16.png");
-    void * pixels = m_resourceManager->GetImageData();
-    ivec2 imageSize = m_resourceManager->GetImageSize();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSize.x, imageSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    m_resourceManager->UnloadImage();
+    SetPngTexture("Grid16.png");
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
     glEnable(GL_TEXTURE_2D);
     
@@ -153,15 +152,53 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         // Draw the surface
         int stride = sizeof(vec3) * 2 + sizeof(vec2);
         const GLvoid * texCoordOffset = (const GLvoid *)(2* sizeof(vec3));
+        const GLvoid * normalOffset = (const GLvoid *)sizeof(vec3);
         const Drawable& drawable = m_drawables[visualIndex];
         glBindBuffer(GL_ARRAY_BUFFER, drawable.VertexBuffer);
         glVertexPointer(3, GL_FLOAT, stride, 0);
-        const GLvoid * normalOffset = (const GLvoid *)sizeof(vec3);
         glNormalPointer(GL_FLOAT, stride, normalOffset);
         glTexCoordPointer(2, GL_FLOAT, stride, texCoordOffset);
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
         glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
+}
+    
+void RenderingEngine::SetPngTexture(const string &name) const {
+    TextureDescription description = m_resourceManager->LoadPngImage(name);
+    GLenum format;
+    switch (description.Format) {
+        case TextureFormatGrey:
+            format = GL_LUMINANCE;
+            break;
+        case TextureFormatGreyAlpha:
+            format = GL_LUMINANCE_ALPHA;
+            break;
+        case TextureFormatRGB:
+            format = GL_RGB;
+            break;
+        case TextureFormatRGBA:
+            format = GL_RGBA;
+            break;
+    }
+    GLenum type;
+    switch (description.BitsPerComponent) {
+        case 8:
+            type = GL_UNSIGNED_BYTE;
+            break;
+        case 4:
+            if (format == GL_RGBA) {
+                type = GL_UNSIGNED_SHORT_4_4_4_4;
+                break;
+            }
+            // intentionally fall through
+        default:
+            assert(!"Unsupported Format");
+            break;
+    }
+    void * data = m_resourceManager->GetImageData();
+    ivec2 size = description.size;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, size.x, size.y, 0, format, type, data);
+    m_resourceManager->UnloadImage();
 }
     
 }

@@ -10,6 +10,7 @@
 #include <OpenGLES/ES2/gl.h>
 #include <OpenGLES/ES2/glext.h>
 #include <iostream>
+#include <assert.h>
 #include "Interfaces.hpp"
 #include "Matrix.hpp"
 
@@ -48,6 +49,7 @@ public:
     void Initialize(const vector<ISurface*>& surfaces);
     void Render(const vector<Visual>& visuals) const;
 private:
+    void SetPngTexture(const string & name) const;
     GLuint BuildProgram(const char* vertexShaderSource, const char* fragmentShaderSource) const;
     GLuint BuildShader(const char* source, GLenum shaderType) const;
     vector<Drawable> m_drawables;
@@ -77,7 +79,7 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     for (surface = surfaces.begin(); surface != surfaces.end(); ++surface) {
         // Create VBO for vertices
         vector<float> vertices;
-        (*surface)->GenerateVertices(vertices, VertexFlagsNormal);
+        (*surface)->GenerateVertices(vertices, VertexFlagsNormal | VertexFlagsTexCoords);
         GLuint vertexBuffer;
         glGenBuffers(1, &vertexBuffer);
         glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
@@ -135,13 +137,10 @@ void RenderingEngine::Initialize(const vector<ISurface *> &surfaces) {
     // Load the texture
     glGenTextures(1, &m_gridTexture);
     glBindTexture(GL_TEXTURE_2D, m_gridTexture);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    m_resourceManager->LoadPngImage("Grid16.png");
-    void * pixels = m_resourceManager->GetImageData();
-    ivec2 imageSize = m_resourceManager->GetImageSize();
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, imageSize.x, imageSize.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
-    m_resourceManager->UnloadImage();
+    SetPngTexture("Grid16.png");
+    glGenerateMipmap(GL_TEXTURE_2D);
     
     // some default material parameters
     glVertexAttrib3f(m_uniforms.Ambient, 0.04, 0.04, 0.04);
@@ -205,6 +204,44 @@ void RenderingEngine::Render(const vector<Visual>& visuals) const {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, drawable.IndexBuffer);
         glDrawElements(GL_TRIANGLES, drawable.IndexCount, GL_UNSIGNED_SHORT, 0);
     }
+}
+    
+void RenderingEngine::SetPngTexture(const string &name) const {
+    TextureDescription description = m_resourceManager->LoadPngImage(name);
+    GLenum format;
+    switch (description.Format) {
+        case TextureFormatGrey:
+            format = GL_LUMINANCE;
+            break;
+        case TextureFormatGreyAlpha:
+            format = GL_LUMINANCE_ALPHA;
+            break;
+        case TextureFormatRGB:
+            format = GL_RGB;
+            break;
+        case TextureFormatRGBA:
+            format = GL_RGBA;
+            break;
+    }
+    GLenum type;
+    switch (description.BitsPerComponent) {
+        case 8:
+            type = GL_UNSIGNED_BYTE;
+            break;
+        case 4:
+            if (format == GL_RGBA) {
+                type = GL_UNSIGNED_SHORT_4_4_4_4;
+                break;
+            }
+            // intentionally fall through
+        default:
+            assert(!"Unsupported Format");
+            break;
+    }
+    void * data = m_resourceManager->GetImageData();
+    ivec2 size = description.size;
+    glTexImage2D(GL_TEXTURE_2D, 0, format, size.x, size.y, 0, format, type, data);
+    m_resourceManager->UnloadImage();
 }
     
 GLuint RenderingEngine::BuildProgram(const char* vertexShaderSource, const char* fragmentShaderSource) const {
